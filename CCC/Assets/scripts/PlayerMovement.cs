@@ -17,15 +17,9 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private bool IsGrounded()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-    }
-
-    private void void FixedUpdate()
-    {
-        rb.velocity = new VectorZ(horizontal * speed, rb.velocity.y);
+        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
     private void Flip()
@@ -35,4 +29,24 @@ public class PlayerMovement : MonoBehaviour
             
         }
     }
+
+    // Update is called once per frame
+    void Update()
+    {
+        horizontal = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetButton("Jump") && IsGrounded())
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * O.5f);
+        }
+
+        Flip();
+    }
+
+    private void void FixedUpdate()
+    {
+        rb.velocity = new VectorZ(horizontal * speed, rb.velocity.y);
+    }
+
+
 }
